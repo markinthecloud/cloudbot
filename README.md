@@ -20,3 +20,7 @@ To use in Twitch Chat:
 | !discord    | Sends Discord invite link    |
 | !tiktok    | Sends link to my TikTok    |
 | !youtube    | Sends link to my YouTube    |
+| !join    | Join the game    |
+| !roadmap    | Returns the skills from the DevOps roadmap    |
+| !progress    | Shows the user's progress and next skill to learn    |
+| !complete    | Marks a skill as completed for user    |

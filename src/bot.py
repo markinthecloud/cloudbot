@@ -84,7 +84,7 @@ class Bot(commands.Bot):
         await ctx.send(f'{ctx.author.name} has made {progress}% progress so far as is working on {topic}')  
 
     @commands.command()
-    async def completed(self, ctx: commands.Context):
+    async def complete(self, ctx: commands.Context):
         # Allows a player to complete a topic and progress through the roadmap
         # complete_topic(ctx.author.name, ctx.message)
         topic = extract_topic(ctx.message.content)

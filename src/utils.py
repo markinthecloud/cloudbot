@@ -15,7 +15,7 @@ def calculate_progress_pc(modules: list, completed: list):
     return formatted_pc
 
 def extract_topic(command:str):
-    match = re.match(r'!completed (.+)', command)
+    match = re.match(r'!complete (.+)', command)
     if match:
         topic_name = match.group(1).strip()
         return topic_name
