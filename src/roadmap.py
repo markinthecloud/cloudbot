@@ -16,6 +16,7 @@ def create_db_tables():
         name TEXT NOT NULL,
         modules TEXT NOT NULL,
         completed TEXT
+        role TEXT
     )
     """)
     conn.commit()
@@ -118,4 +119,35 @@ def complete_topic(user, topic):
     conn.commit()
     conn.close()
     
-    return f"Topic '{topic}' moved to completed for {user}"
+    return f"Topic {topic} moved to completed for {user}"
+
+def update_role(user, role):
+    conn = connect_db()
+    cursor = conn.cursor()
+    
+    sql_select = """
+    SELECT role 
+    FROM progress 
+    WHERE name = ?
+    """
+    
+    cursor.execute(sql_select, (user,))
+    result = cursor.fetchone()
+
+    if not result:
+        print("No record found for the given user.")
+        conn.close()
+        return
+
+    # Update the database
+    sql_update = """
+    UPDATE progress
+    SET role = ?
+    WHERE name = ?
+    """
+    
+    cursor.execute(sql_update, (role, user))
+    conn.commit()
+    conn.close()
+    
+    return f"{user} is now a {role}, congrats!"

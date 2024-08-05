@@ -21,5 +21,13 @@ def extract_topic(command:str):
         return topic_name
     else:
         return None
+    
+def extract_role(command:str):
+    match = re.match(r'!role (.+)', command)
+    if match:
+        topic_name = match.group(1).strip()
+        return topic_name
+    else:
+        return None
 
 

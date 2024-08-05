@@ -1,8 +1,8 @@
 import os
 from twitchio.ext import commands
 from dotenv import load_dotenv
-from roadmap import create_db_tables, add_new_user, retrieve_progress_data, calculate_progress_pc, complete_topic
-from utils import extract_topic
+from roadmap import create_db_tables, add_new_user, retrieve_progress_data, calculate_progress_pc, complete_topic, update_role
+from utils import extract_topic, extract_role
 
 load_dotenv()
 
@@ -93,6 +93,16 @@ class Bot(commands.Bot):
         else:
             response = "Invalid use of !complete command. Here's an example: !complete Linux"
         await ctx.send(f'{response}') 
+
+    @commands.command()
+    async def role(self, ctx: commands.Context):
+        # Assigns a role to the user
+        role = extract_role(ctx.message.content)
+        if role != None:
+            response = update_role(ctx.author.name, role)
+        else:
+            response = "Make sure you've used !join and formatted your !role correctly. E.g. !role DevOps Engineer"
+        await ctx.send(f'{response}')   
 
 create_db_tables()
 bot = Bot()
