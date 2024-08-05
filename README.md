@@ -24,3 +24,4 @@ To use in Twitch Chat:
 | !roadmap    | Returns the skills from the DevOps roadmap    |
 | !progress    | Shows the user's progress and next skill to learn    |
 | !complete    | Marks a skill as completed for user    |
+| !role    | Add a role to your profile, e.g. !role DevOps Engineer   |
