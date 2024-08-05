@@ -1,11 +1,16 @@
 import os
 from twitchio.ext import commands
 from dotenv import load_dotenv
-
+from roadmap import create_db_tables, add_new_user, retrieve_progress_data, calculate_progress_pc, complete_topic
+from utils import extract_topic
 
 load_dotenv()
 
 ACCESS_TOKEN=os.environ['ACCESS_TOKEN']
+MODULES = """
+            Linux, Bash Scripting, Docker, Python, Git & GitHub, Basic Networking,
+            AWS or Azure, Terraform, CI/CD - Github Actions, Ansible, Build Projects
+            """
 
 class Bot(commands.Bot):
 
@@ -59,6 +64,37 @@ class Bot(commands.Bot):
         # Returns Tiktok link
         await ctx.send(f'Follow Mark on YouTube: https://youtube.com/@markinthecloud')
 
+    @commands.command()
+    async def join(self, ctx: commands.Context):
+        # Allows a player to join DevOps and record their progress against the roadmap
+        response = add_new_user(ctx.author.name)
+        await ctx.send(response)
+
+    @commands.command()
+    async def roadmap(self, ctx: commands.Context):
+        # Returns the current DevOps roadmap
+        await ctx.send(f"DevOps Roadmap: {MODULES}")      
+
+    @commands.command()
+    async def progress(self, ctx: commands.Context):
+        # Allows a player to join DevOps and record their progress against the roadmap
+        modules, completed = retrieve_progress_data(ctx.author.name)
+        progress = calculate_progress_pc(modules, completed)
+        topic = modules[0]
+        await ctx.send(f'{ctx.author.name} has made {progress}% progress so far as is working on {topic}')  
+
+    @commands.command()
+    async def completed(self, ctx: commands.Context):
+        # Allows a player to complete a topic and progress through the roadmap
+        # complete_topic(ctx.author.name, ctx.message)
+        topic = extract_topic(ctx.message.content)
+        if topic != None:
+            response = complete_topic(ctx.author.name, topic)
+        else:
+            response = "Invalid use of !complete command. Here's an example: !complete Linux"
+        await ctx.send(f'{response}') 
+
+create_db_tables()
 bot = Bot()
 bot.run()
 # bot.run() is blocking and will stop execution of any below code here until stopped or closed.
