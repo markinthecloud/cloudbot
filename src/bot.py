@@ -1,6 +1,7 @@
 import os
 from twitchio.ext import commands
 from dotenv import load_dotenv
+# from rich import print as rprint
 from roadmap import create_db_tables, add_new_user, retrieve_progress_data, calculate_progress_pc, complete_topic, update_role
 from utils import extract_topic, extract_role
 
@@ -28,7 +29,7 @@ class Bot(commands.Bot):
             return
 
         # Print the contents of our message to console...
-        print(message.content)
+        print(f"[red]{message.content}")
 
         # Since we have commands and are overriding the default `event_message`
         # We must let the bot know we want to handle and invoke our commands...
@@ -65,6 +66,11 @@ class Bot(commands.Bot):
         await ctx.send(f'Follow Mark on YouTube: https://youtube.com/@markinthecloud')
 
     @commands.command()
+    async def github(self, ctx: commands.Context):
+        # Returns Tiktok link
+        await ctx.send(f'This project is on GitHub here: https://github.com/markinthecloud/cloudbot')
+
+    @commands.command()
     async def join(self, ctx: commands.Context):
         # Allows a player to join DevOps and record their progress against the roadmap
         response = add_new_user(ctx.author.name)
@@ -86,7 +92,6 @@ class Bot(commands.Bot):
     @commands.command()
     async def complete(self, ctx: commands.Context):
         # Allows a player to complete a topic and progress through the roadmap
-        # complete_topic(ctx.author.name, ctx.message)
         topic = extract_topic(ctx.message.content)
         if topic != None:
             response = complete_topic(ctx.author.name, topic)

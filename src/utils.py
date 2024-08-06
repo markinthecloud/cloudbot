@@ -12,7 +12,7 @@ def convert_str_to_list(strings:str):
 def calculate_progress_pc(modules: list, completed: list):
     progress_pc = len(completed)/len(modules)*100
     formatted_pc = f"{progress_pc:.2f}"
-    return formatted_pc
+    return float(formatted_pc)
 
 def extract_topic(command:str):
     match = re.match(r'!complete (.+)', command)
