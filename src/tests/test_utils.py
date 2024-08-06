@@ -1,9 +1,9 @@
 """
 Testing Suite
 """
+"""import pytest"""
 import pytest
-from utils import convert_str_to_list, calculate_progress_pc
-
+from utils import calculate_progress_pc, convert_str_to_list
 
 def test_convert_str_to_list():
     """
@@ -29,6 +29,6 @@ def test_division_by_zero_error():
     """
     modules = []
     completed = ['Windows', 'Powershell', 'GitBash', 'Docker']
-    with pytest.raises(ZeroDivisionError) as excinfo:
+    with pytest.raises(ZeroDivisionError) as exc_info:
         calculate_progress_pc(modules, completed)
-    assert excinfo.type is ZeroDivisionError
+    assert exc_info.type is ZeroDivisionError 
