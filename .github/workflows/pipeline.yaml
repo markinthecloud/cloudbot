@@ -23,7 +23,7 @@ jobs:
 
     - name: Linting
       env:
-        PYTHONPATH: .
+        PYTHONPATH: ${{ github.workspace }}
       run: |
         pylint **/*.py
 
