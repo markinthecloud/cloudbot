@@ -1,9 +1,13 @@
+"""
+Twitch bot for interaction with users whilst streaming. Handles all chat msgs & commands
+"""
 import os
 from twitchio.ext import commands
 from dotenv import load_dotenv
 # from rich import print as rprint
-from roadmap import create_db_tables, add_new_user, retrieve_progress_data, calculate_progress_pc, complete_topic, update_role
-from utils import extract_topic, extract_role
+from roadmap import create_db_tables, add_new_user, retrieve_progress_data, complete_topic, \
+    update_role
+from utils import extract_topic, extract_role, calculate_progress_pc
 
 load_dotenv()
 
@@ -14,7 +18,9 @@ MODULES = """
             """
 
 class Bot(commands.Bot):
-
+    """
+    Main Bot class to listen for and process incoming messages & commands
+    """
     def __init__(self):
         super().__init__(token=ACCESS_TOKEN, prefix='!', initial_channels=['markinthecloud'])
 
@@ -37,77 +43,104 @@ class Bot(commands.Bot):
 
     @commands.command()
     async def help(self, ctx: commands.Context):
-        # Send a link to the available commands!
-        await ctx.send(f'Commands: https://markinthecloud.com/commands')
+        """
+        Sends a link to the available commands when !help is used
+        """
+        await ctx.send('Commands: https://markinthecloud.com/commands')
 
     @commands.command()
     async def hello(self, ctx: commands.Context):
-        # Sends a hello back!
+        """
+        Sends a "hello" back to the user when !hello is used
+        """
         await ctx.send(f'Hello {ctx.author.name}!')
 
     @commands.command()
     async def web(self, ctx: commands.Context):
-        # Sends back my website links
-        await ctx.send(f'https://markinthecloud.com | https://thedevopsacademy.com')
+        """
+        Sends links to my websites when !web is used
+        """
+        await ctx.send('https://markinthecloud.com | https://thedevopsacademy.com')
 
     @commands.command()
     async def discord(self, ctx: commands.Context):
-        # Returns Discord invite link
-        await ctx.send(f'Join our Discord: https://discord.gg/6nVd32U8GY')
+        """
+        Sends a link join Discord when !discord is used
+        """
+        await ctx.send('Join our Discord: https://discord.gg/6nVd32U8GY')
 
     @commands.command()
     async def tiktok(self, ctx: commands.Context):
-        # Returns Tiktok link
-        await ctx.send(f'Follow Mark on TikTok: https://tiktok.com/@markinthecloud')
+        """
+        Sends a link to TikTok when !tiktok is used
+        """
+        await ctx.send('Follow Mark on TikTok: https://tiktok.com/@markinthecloud')
 
     @commands.command()
     async def youtube(self, ctx: commands.Context):
-        # Returns Tiktok link
-        await ctx.send(f'Follow Mark on YouTube: https://youtube.com/@markinthecloud')
+        """
+        Sends a link to YouTube when !youtube is used
+        """
+        await ctx.send('Follow Mark on YouTube: https://youtube.com/@markinthecloud')
 
     @commands.command()
     async def github(self, ctx: commands.Context):
-        # Returns Tiktok link
-        await ctx.send(f'This project is on GitHub here: https://github.com/markinthecloud/cloudbot')
+        """
+        Sends a link the GitHub repo for this project when !github is used
+        """
+        await ctx.send('This project is on GitHub here: \
+                       https://github.com/markinthecloud/cloudbot')
 
     @commands.command()
     async def join(self, ctx: commands.Context):
-        # Allows a player to join DevOps and record their progress against the roadmap
+        """
+        Adds the user to the db when !join is used
+        """
         response = add_new_user(ctx.author.name)
         await ctx.send(response)
 
     @commands.command()
     async def roadmap(self, ctx: commands.Context):
-        # Returns the current DevOps roadmap
-        await ctx.send(f"DevOps Roadmap: {MODULES}")      
+        """
+        Sends a list of the roadmap skills when !roadmap is used
+        """
+        await ctx.send(f"DevOps Roadmap: {MODULES}")
 
     @commands.command()
     async def progress(self, ctx: commands.Context):
-        # Allows a player to join DevOps and record their progress against the roadmap
+        """
+        Sends a summary of the user's progress when !progress is used
+        """
         modules, completed = retrieve_progress_data(ctx.author.name)
         progress = calculate_progress_pc(modules, completed)
         topic = modules[0]
-        await ctx.send(f'{ctx.author.name} has made {progress}% progress so far as is working on {topic}')  
+        await ctx.send(f'{ctx.author.name} has made {progress}% progress so far as is \
+                       working on {topic}')
 
     @commands.command()
     async def complete(self, ctx: commands.Context):
-        # Allows a player to complete a topic and progress through the roadmap
+        """
+        Marks a topic as complete in the db when !complete {topic} is used
+        """
         topic = extract_topic(ctx.message.content)
-        if topic != None:
+        if topic is not None:
             response = complete_topic(ctx.author.name, topic)
         else:
             response = "Invalid use of !complete command. Here's an example: !complete Linux"
-        await ctx.send(f'{response}') 
+        await ctx.send(f'{response}')
 
     @commands.command()
     async def role(self, ctx: commands.Context):
-        # Assigns a role to the user
+        """
+        Updates the user's role in the db when !role {role title} is used
+        """
         role = extract_role(ctx.message.content)
-        if role != None:
+        if role is not None:
             response = update_role(ctx.author.name, role)
         else:
-            response = "Make sure you've used !join and formatted your !role correctly. E.g. !role DevOps Engineer"
-        await ctx.send(f'{response}')   
+            response = "Make sure you've used !join and formatted your !role correctly. \
+                E.g. !role DevOps Engineer"
+        await ctx.send(f'{response}')
 
 create_db_tables()
 bot = Bot()
