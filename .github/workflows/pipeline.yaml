@@ -28,5 +28,7 @@ jobs:
         pylint **/*.py
 
     - name: Run tests
+      env:
+        PYTHONPATH: ${{ github.workspace }}/src
       run: |
         pytest ./src/test.py
