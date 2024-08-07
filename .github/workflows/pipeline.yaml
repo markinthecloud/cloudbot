@@ -32,4 +32,4 @@ jobs:
         PYTHONPATH: ${{ github.workspace }}/src
       run: |
         cd src/tests
-        pytest **/*.py
+        pytest
