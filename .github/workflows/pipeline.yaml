@@ -31,4 +31,5 @@ jobs:
       env:
         PYTHONPATH: ${{ github.workspace }}/src
       run: |
+        ls -alh
         pytest ./tests/test_utils.py
