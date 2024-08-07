@@ -19,8 +19,11 @@ def calculate_progress_pc(modules: list, completed: list):
     """
     Takes 2 lists, gets the length of both and then calculates a %
     """
-    progress_pc = len(completed)/len(modules)*100
-    formatted_pc = f"{progress_pc:.2f}"
+    try:
+        progress_pc = len(completed)/len(modules)*100
+        formatted_pc = f"{progress_pc:.2f}"
+    except(ZeroDivisionError):
+        return "'Division Error - Speak to Mark'"
     return float(formatted_pc)
 
 def extract_topic(command:str):
